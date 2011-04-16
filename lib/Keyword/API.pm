@@ -120,7 +120,7 @@ Discard everything in the buffer until white space is met
 
 =head1 SEE ALSO
 
-l<perlapi> Devel::Declare Filter::Simple
+L<perlapi> Devel::Declare Filter::Simple
 
 =head1 AUTHOR
 
