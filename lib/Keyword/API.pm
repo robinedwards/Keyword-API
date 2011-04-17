@@ -5,8 +5,6 @@ use warnings;
 use Exporter 'import';
 require XSLoader;
 
-our $VERSION = 0.0001;
-
 our @EXPORT = qw/
     install_keyword
     uninstall_keyword 
@@ -19,7 +17,7 @@ our @EXPORT = qw/
     lex_unstuff_token
     /;
 
-XSLoader::load('Keyword::API', $VERSION);
+XSLoader::load('Keyword::API', $Keyword::API::VERSION);
 
 1;
 __END__
@@ -122,18 +120,3 @@ Discard everything in the buffer until white space is met
 
 L<perlapi> Devel::Declare Filter::Simple
 
-=head1 AUTHOR
-
-Robin Edwards, E<lt>robin.ge@gmail.comE<gt>
-
-Thanks to Zefram for the core API.
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) 2011 by Robin Edwards
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5 or,
-at your option, any later version of Perl 5 you may have available.
-
-=cut
