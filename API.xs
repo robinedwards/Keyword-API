@@ -75,7 +75,7 @@ static int my_keyword_plugin(pTHX_
 	if(keyword_len == kw_len && strnEQ(keyword_ptr, kw_str, kw_len) &&
 			keyword_active(hintkey_keyword_sv)) {
         printf("called keyword plugin!\n");
-        call_sv(keyword_parser_sv, 0);
+        call_sv(keyword_parser_sv, G_DISCARD|G_NOARGS);
 		*op_ptr = newOP(OP_NULL,0);
 		return KEYWORD_PLUGIN_STMT;
 	} else {
