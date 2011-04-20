@@ -48,17 +48,15 @@ static void THX_keyword_enable(pTHX_ SV *classname, SV* keyword)
 #define keyword_enable(class_sv, keyword_sv) THX_keyword_enable(aTHX_ class_sv, keyword_sv)
 
 
-static void THX_keyword_disable(pTHX_)
+static void THX_keyword_disable(pTHX)
 {
 	if(GvHV(PL_hintgv)) {
 		PL_hints |= HINT_LOCALIZE_HH;
 		hv_delete_ent(GvHV(PL_hintgv),
 			hintkey_keyword_sv, G_DISCARD, SvSHARED_HASH(hintkey_keyword_sv));
 	}
-
-    printf("uninstalled\n");
 }
-#define keyword_disable() THX_keyword_disable(aTHX_)
+#define keyword_disable() THX_keyword_disable(aTHX)
 
 
 static int my_keyword_plugin(pTHX_
@@ -74,7 +72,6 @@ static int my_keyword_plugin(pTHX_
 
 	if(keyword_len == kw_len && strnEQ(keyword_ptr, kw_str, kw_len) &&
 			keyword_active(hintkey_keyword_sv)) {
-        printf("called keyword plugin!\n");
         call_sv(keyword_parser_sv, G_DISCARD|G_NOARGS);
 		*op_ptr = newOP(OP_NULL,0);
 		return KEYWORD_PLUGIN_STMT;
@@ -97,7 +94,7 @@ PPCODE:
     keyword_enable(classname,keyword);
 
 void
-uninstall_keyword()
+uninstall_keyword();
 PPCODE:
     keyword_disable();
 
@@ -114,7 +111,7 @@ CODE:
 OUTPUT:
     RETVAL
 
-SV *lex_read_token()
+SV *lex_read_to_ws()
 CODE:
     char *start = PL_bufptr;
     char *p = start;
@@ -131,7 +128,7 @@ OUTPUT:
     RETVAL
 
 
-SV *lex_unstuff_token()
+SV *lex_unstuff_to_ws()
 CODE:
     char *start = PL_bufptr;
     char *p = start;

@@ -10,11 +10,11 @@ our @EXPORT = qw/
     uninstall_keyword 
     lex_read_space
     lex_read
-    lex_read_token
+    lex_read_to_ws
     lex_stuff
     lex_unstuff
     lex_unstuff_to
-    lex_unstuff_token
+    lex_unstuff_to_ws
     /;
 
 XSLoader::load('Keyword::API', $Keyword::API::VERSION);
@@ -35,14 +35,14 @@ Keyword::API - Perl interface to the keyword API
 
         my $name = %params && $params{-as} ? $params{-as} : "method";
 
-        $class->install_keyword($name);
+        install_keyword(__PACKAGE__, $name);
     }
 
     sub unimport { uninstall_keyword() }
 
     sub parser {
         lex_read_space(0);
-        my $sub_name = lex_unstuff_token();
+        my $sub_name = lex_unstuff_to_ws();
         my $sig = lex_unstuff_to('{');
         my ($roll) = $sig =~ /\((.+)\)\s*{/;
         lex_stuff("sub $sub_name {my (\$self, $roll) = \@_;");
@@ -50,7 +50,11 @@ Keyword::API - Perl interface to the keyword API
 
 =head1 DESCRIPTION
 
-This is an experimental module to provide a pure perl interface for the keywords API added to the perl core in 5.12.
+This module provides a pure perl interface for the keywords API added to the perl core in 5.12.
+
+=head1 EXPERIMENTAL
+
+This module is likely to change in the near future. Patches and feedback most welcome.
 
 =head2 EXPORT
 
@@ -58,21 +62,21 @@ This is an experimental module to provide a pure perl interface for the keywords
     uninstall_keyword 
     lex_read_space
     lex_read
-    lex_read_token
+    lex_read_to_ws
     lex_stuff
     lex_unstuff
     lex_unstuff_to
-    lex_unstuff_token
+    lex_unstuff_to_ws
 
 =head1 FUNCTIONS
 
 =head2 install_keyword
 
-class method, provide name of your keyword e.g 'method'
+pass your package name and provide the name of your keyword e.g 'method'
 
 =head2 uninstall_keyword
 
-remove the keyword hook, no arguments.
+remove the keyword hook, no arguments required.
 
 =head2 lex_read_space
 
@@ -86,7 +90,7 @@ reads white space and comments in the text currently being lexed.
 
 Consumes $n bytes of text from the lexer buffer.
 
-=head2 lex_read_token
+=head2 lex_read_to_ws
 
     my $toke = lex_read_token();
 
@@ -110,7 +114,7 @@ Discard $n bytes from the lexers buffer
 
 Discard everything in the buffer until the character is met.
 
-=head2 lex_unstuff_token
+=head2 lex_unstuff_to_ws
 
     my $discarded_text = lext_unstuff_token();
 
@@ -118,5 +122,5 @@ Discard everything in the buffer until white space is met
 
 =head1 SEE ALSO
 
-L<perlapi> Devel::Declare Filter::Simple
+L<perlapi> Devel::Declare Filter::Simple Syntax::Feature::Method
 
